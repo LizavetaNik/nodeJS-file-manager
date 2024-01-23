@@ -20,15 +20,18 @@ export class AppController {
     const commands = new Map([
       [".exit", () => replService.close()],
       ["echo", echo],
-      ["cwd", () => echo(navigationService.сwd)],
+      ["cwd", () => echo(navigationService.cwd)],
+      ["up", () => navigationService.upDirectory()],
+      ["cd", (args) => navigationService.changeDirectory(args)],
+      ["ls", () => navigationService.list()],
     ]);
 
     const username = stateService.get("username");
 
     const getCurrentCwd = () =>
-      this.createMessage(`${EOL}You are currently in ${navigationService.сwd}`);
+      this.createMessage(`${EOL}You are currently in ${navigationService.cwd}`);
 
-    const handleInput = (input) => {
+    const handleInput = async (input) => {
       const trimmedInput = input.trim();
       if (!trimmedInput) {
         return;
@@ -37,7 +40,7 @@ export class AppController {
       const handler = commands.get(command);
       try {
         if (handler) {
-          handler(args.join(" ").trim());
+          await handler(args.join(" ").trim());
         } else {
           throw new Error("Invalid input");
         }
