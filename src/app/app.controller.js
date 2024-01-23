@@ -24,6 +24,12 @@ export class AppController {
       ["up", () => navigationService.upDirectory()],
       ["cd", (args) => navigationService.changeDirectory(args)],
       ["ls", () => navigationService.list()],
+      ["cat", (args) => filesService.concatenate(args)],
+      ["add", (args) => filesService.addFile(args)],
+      ["rn", (args) => filesService.renameFile(args)],
+      ["cp", (args) => filesService.copyFile(args)],
+      ["mv", (args) => filesService.moveFile(args)],
+      ["rm", (args) => filesService.removeFile(args)],
     ]);
 
     const username = stateService.get("username");
