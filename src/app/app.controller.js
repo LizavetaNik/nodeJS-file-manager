@@ -30,6 +30,7 @@ export class AppController {
       ["cp", (args) => filesService.copyFile(args)],
       ["mv", (args) => filesService.moveFile(args)],
       ["rm", (args) => filesService.removeFile(args)],
+      ["os", (args) => osService.os(args)],
     ]);
 
     const username = stateService.get("username");
