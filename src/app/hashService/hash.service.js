@@ -13,22 +13,26 @@ export class HashService {
   }
 
   hash(args) {
-    const [filePath] = parseCommandList(args);
-    const fullPath = resolve(this.cwd, filePath);
-    const hash = createHash("sha256");
-    const stream = createReadStream(fullPath);
+    return new Promise((res) => {
+      const [filePath] = parseCommandList(args);
+      const fullPath = resolve(this.cwd, filePath);
+      const hash = createHash("sha256");
+      const stream = createReadStream(fullPath);
 
-    stream.on("data", (data) => {
-      hash.update(data);
-    });
+      stream.on("data", (data) => {
+        hash.update(data);
+      });
 
-    stream.on("end", () => {
-      const fileHash = hash.digest("hex");
-      console.log(`Hash of file ${filePath}: ${fileHash}`);
-    });
+      stream.on("end", () => {
+        const fileHash = hash.digest("hex");
+        console.log(`${fileHash}`);
+        res();
+      });
 
-    stream.on("error", () => {
-      console.error("Operation failed");
+      stream.on("error", () => {
+        console.error("Operation failed");
+        res();
+      });
     });
   }
 }

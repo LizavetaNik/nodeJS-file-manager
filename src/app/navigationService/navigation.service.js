@@ -36,10 +36,10 @@ export class NavigationService {
       if (directoryStats.isDirectory()) {
         this.cwd = targetDirectory;
       } else {
-        throw new Error("Operation failed: Not a directory");
+        throw new Error("Operation failed");
       }
     } catch (error) {
-      throw new Error(`Operation failed: ${error.message}`);
+      throw new Error("Operation failed");
     }
   }
 

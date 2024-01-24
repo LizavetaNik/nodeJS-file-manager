@@ -13,56 +13,78 @@ export class ZipService {
   }
 
   compress(args) {
-    try {
-      const [filePath, pathToDest] = parseCommandList(args);
-      const fullPath = resolve(this.cwd, filePath);
-      const destinationFullPath = resolve(this.cwd, pathToDest);
+    return new Promise(async (res) => {
+      try {
+        const [filePath, pathToDest] = parseCommandList(args);
+        const fullPath = resolve(this.cwd, filePath);
+        const destinationFullPath = resolve(this.cwd, pathToDest);
 
-      const readStream = createReadStream(fullPath);
-      const writeStream = createWriteStream(destinationFullPath, {
-        flags: "wx",
-      });
-      const compressStream = createBrotliCompress();
+        const readStream = createReadStream(fullPath);
+        const writeStream = createWriteStream(destinationFullPath, {
+          flags: "wx",
+        });
+        const compressStream = createBrotliCompress();
 
-      compressStream.on("error", () => console.error("Operation failed"));
-      readStream.on("error", () => console.error("Operation failed"));
-      writeStream.on("error", () => console.error("Operation failed"));
+        compressStream.on("error", () => {
+          console.error("Operation failed");
+          res();
+        });
+        readStream.on("error", () => {
+          console.error("Operation failed");
+          res();
+        });
+        writeStream.on("error", () => {
+          console.error("Operation failed");
+          res();
+        });
 
-      readStream.pipe(compressStream).pipe(writeStream);
+        readStream.pipe(compressStream).pipe(writeStream);
 
-      writeStream.on("finish", () => {
-        console.log(`File compressed successfully to: ${destinationFullPath}`);
-      });
-    } catch {
-      console.error("Operation failed");
-    }
+        writeStream.on("finish", () => {
+          res();
+        });
+      } catch {
+        console.error("Operation failed");
+        res();
+      }
+    });
   }
 
   decompress(args) {
-    try {
-      const [filePath, pathToDest] = parseCommandList(args);
-      const fullPath = resolve(this.cwd, filePath);
-      const destinationFullPath = resolve(this.cwd, pathToDest);
+    return new Promise(async (res) => {
+      try {
+        const [filePath, pathToDest] = parseCommandList(args);
+        const fullPath = resolve(this.cwd, filePath);
+        const destinationFullPath = resolve(this.cwd, pathToDest);
 
-      const readStream = createReadStream(fullPath);
-      const writeStream = createWriteStream(destinationFullPath, {
-        flags: "wx",
-      });
-      const compressStream = createBrotliDecompress();
+        const readStream = createReadStream(fullPath);
+        const writeStream = createWriteStream(destinationFullPath, {
+          flags: "wx",
+        });
+        const compressStream = createBrotliDecompress();
 
-      compressStream.on("error", () => console.error("Operation failed"));
-      readStream.on("error", () => console.error("Operation failed"));
-      writeStream.on("error", () => console.error("Operation failed"));
+        compressStream.on("error", () => {
+          console.error("Operation failed");
+          res();
+        });
+        readStream.on("error", () => {
+          console.error("Operation failed");
+          res();
+        });
+        writeStream.on("error", () => {
+          console.error("Operation failed");
+          res();
+        });
 
-      readStream.pipe(compressStream).pipe(writeStream);
+        readStream.pipe(compressStream).pipe(writeStream);
 
-      writeStream.on("finish", () => {
-        console.log(
-          `File decompressed successfully to: ${destinationFullPath}`
-        );
-      });
-    } catch {
-      console.error("Operation failed");
-    }
+        writeStream.on("finish", () => {
+          res();
+        });
+      } catch {
+        console.error("Operation failed");
+        res();
+      }
+    });
   }
 }

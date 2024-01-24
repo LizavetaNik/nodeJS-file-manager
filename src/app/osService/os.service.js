@@ -20,16 +20,18 @@ export class OSService {
   }
 
   eol() {
-    console.log(`Default system End-Of-Line: ${JSON.stringify(EOL)}`);
+    console.log(`Default system EOL: ${JSON.stringify(EOL)}`);
   }
 
   cpus() {
     const cpuInfo = cpus();
-    cpuInfo.forEach((cpu, index) => {
-      console.log(`CPU ${index + 1}:`);
-      console.log(`  Model: ${cpu.model}`);
-      console.log(`  Speed: ${cpu.speed / 1000}`);
-    });
+    const table = cpuInfo.map((cpu, index) => ({
+      CPU: `CPU ${index + 1}`,
+      Model: cpu.model,
+      Speed: `${cpu.speed / 1000} GHz`,
+    }));
+
+    console.table(table);
   }
 
   homedir() {
@@ -37,12 +39,10 @@ export class OSService {
   }
 
   username() {
-    console.log(`Current system user name: ${userInfo().username}`);
+    console.log(`System user name: ${userInfo().username}`);
   }
 
   architecture() {
-    console.log(
-      `CPU architecture for which Node.js binary has compiled: ${arch()}`
-    );
+    console.log(`CPU architecture: ${arch()}`);
   }
 }
