@@ -1,5 +1,7 @@
 import { parseCommandList } from "../utils/parseCommandList.js";
 import { resolve } from "path";
+import { createHash } from "crypto";
+import { createReadStream } from "fs";
 
 export class HashService {
   init(stateService) {
@@ -11,11 +13,6 @@ export class HashService {
   }
 
   hash(args) {
-    if (args.length !== 2) {
-      console.error("Usage: hash <path_to_file>");
-      return;
-    }
-
     const [filePath] = parseCommandList(args);
     const fullPath = resolve(this.cwd, filePath);
     const hash = createHash("sha256");
